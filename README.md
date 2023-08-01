@@ -20,14 +20,14 @@
 
 ## Инструкция по установке:
 1. Клонировать репозиторий 
-`git clone https://github.com/DmitryKazancev/mesto-react`
+`git clone https://github.com/DmitryKazancev/mesto-react-auth`
 2. Установить зависимости
 `npm install`
 3. Запустить локально
 `npm start`
 
 ## 🔗 Ссылка на проект:
-[Проект: Место-React](https://dmitrykazancev.github.io/mesto-react/)
+[Проект: Место-React](https://dmitrykazancev.github.io/mesto-react-auth/)
 
 
 ## 🚀 Обо мне
