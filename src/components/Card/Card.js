@@ -8,11 +8,15 @@ export default function Card({ card, onCardClick, onCardLike, onCardDelete }) {
     const cardLikeButtonClassName = (
         `element__button-like ${isLiked && 'element__button-like_active'}`
     );
+    const handleCardClick = () => {
+        onCardClick({ name: card.name, link: card.link })
+    };
+    const isOwn = currentUser._id === card.owner._id;
 
     return (
         <article className="element">
-            <img src={card.link} alt={card.name} className="element__image" onClick={() => onCardClick({ name: card.name, link: card.link })} />
-            {currentUser._id === card.owner._id && <button
+            <img src={card.link} alt={card.name} className="element__image" onClick={handleCardClick} />
+            { isOwn && <button
                 type="button"
                 className="element__button-trash"
                 aria-label="Удалить карточку"

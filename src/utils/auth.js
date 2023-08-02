@@ -11,11 +11,9 @@ export const register = (password, email) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      password: password,
-      email: email,
-    }),
-  }).then(checkResponse);
+    body: JSON.stringify({ password, email }) ,
+  })
+    .then(checkResponse);
 };
 
 export const authorize = (password, email) => {
@@ -25,11 +23,9 @@ export const authorize = (password, email) => {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      password: password,
-      email: email,
-    }),
-  }).then(checkResponse);
+    body: JSON.stringify({ password, email }),
+  })
+    .then(checkResponse);
 };
 
 export const checkToken = (token) => {

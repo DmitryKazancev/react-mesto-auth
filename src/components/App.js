@@ -15,6 +15,8 @@ import Login from "./Login/Login.js";
 import Register from "./Register/Register.js";
 import InfoTooltip from "./InfoTooltip/InfoTooltip.js";
 import * as auth from "../utils/auth";
+import successIcon from "../images/icon-success.svg";
+import errorIcon from "../images/icon-error.svg";
 
 function App() {
 
@@ -28,8 +30,11 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [isSuccessInfoTooltipStatus, setIsSuccessInfoTooltipStatus] = useState(false);
   const [email, setEmail] = useState("");
+  const [tooltipMessage, setTooltipMessage] = useState("");
+  const [tooltipIcon, setTooltipIcon] = useState([]);
+
 
   //Click to avatar button function
   function handleEditAvatarClick() {
@@ -59,21 +64,20 @@ function App() {
   function handleCardClick(card) {
     setSelectedCard(card);
   }
-
   
   //Delete card function
   function handleCardDelete(card) {
-  const currentCard = card;
-  api.deleteCard(currentCard._id)
-    .then(() => {
-      setCards(prevCards => prevCards.filter(card => {
-        return card._id !== currentCard._id
-      }))
-    })
-    .catch(error => {
-      console.error(`Ошибка удаления карточки ${error}`)
-    })
-}
+    const currentCard = card;
+    api.deleteCard(currentCard._id)
+      .then(() => {
+        setCards(prevCards => prevCards.filter(card => {
+          return card._id !== currentCard._id
+        }))
+      })
+      .catch(error => {
+        console.error(`Ошибка удаления карточки ${error}`)
+      })
+  }
 
   //Set or delete like to card function
   function handleCardLike(card) {
@@ -142,15 +146,20 @@ function App() {
     auth
       .register(formValue.password, formValue.email)
       .then(() => {
-        setIsSuccess(true);
-        setIsInfoTooltipPopupOpen(true);
+        setIsSuccessInfoTooltipStatus(true);
+        setTooltipIcon(successIcon);
+        setTooltipMessage('Вы успешно зарегистрировались!');
         navigate("/sign-in");
       })
       .catch((err) => {
-        setIsSuccess(false);
-        setIsInfoTooltipPopupOpen(true);
+        setIsSuccessInfoTooltipStatus(false);
+        setTooltipIcon(errorIcon);
+        setTooltipMessage('Что-то пошло не так! Попробуйте ещё раз.');
         console.log(err);
-      });
+      })
+      .finally(() => {
+        setIsInfoTooltipPopupOpen(true);
+      })
   };
 
   //User login function
@@ -164,7 +173,7 @@ function App() {
         navigate("/");
       })
       .catch((err) => {
-        setIsSuccess(false);
+        setIsSuccessInfoTooltipStatus(false);
         setIsInfoTooltipPopupOpen(true);
       });
   };
@@ -204,24 +213,39 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  }, [navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
       <Header email={email} handleSignOut={handleSignOut} />
       <Routes>
-          <Route path="/" element={<ProtectedRouteElement element={HomePage} onEditProfile={handleEditProfileClick} onAddPlace={handleAddPlaceClick} onEditAvatar={handleEditAvatarClick} onCardClick={handleCardClick} cards={cards} onCardLike={handleCardLike} onCardDelete={handleCardDelete} loggedIn={loggedIn} />
+          <Route path="/" element={<ProtectedRouteElement 
+                                      element={HomePage} 
+                                      onEditProfile={handleEditProfileClick} 
+                                      onAddPlace={handleAddPlaceClick} 
+                                      onEditAvatar={handleEditAvatarClick} 
+                                      onCardClick={handleCardClick} 
+                                      cards={cards} 
+                                      onCardLike={handleCardLike} 
+                                      onCardDelete={handleCardDelete} 
+                                      loggedIn={loggedIn} 
+                                      />
           } />
           <Route path="/sign-in" element={
-            <>
-            <Login handleLogin={handleLogin} setEmail={setEmail} setIsSuccess={setIsSuccess} setIsInfoTooltipPopupOpen={setIsInfoTooltipPopupOpen}/>
-            </>
+            <Login  handleLogin={handleLogin} 
+                    setEmail={setEmail} 
+                    setIsSuccessInfoTooltipStatus={setIsSuccessInfoTooltipStatus} 
+                    setIsInfoTooltipPopupOpen={setIsInfoTooltipPopupOpen}
+                    />
           } />
           <Route path="/sign-up" element={
-            <>
-             <Register handleRegistration={handleRegister} setLoggedIn={setLoggedIn} setIsSuccess={setIsSuccess} setIsInfoTooltipPopupOpen={setIsInfoTooltipPopupOpen}/>
-            </>
+             <Register  handleRegistration={handleRegister} 
+                        setLoggedIn={setLoggedIn} 
+                        setIsSuccessInfoTooltipStatus={setIsSuccessInfoTooltipStatus} 
+                        setIsInfoTooltipPopupOpen={setIsInfoTooltipPopupOpen}
+                        />
           } />
           <Route path="*" element={loggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />
             }/>
@@ -232,9 +256,14 @@ function App() {
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
         <AddPlacePopup isOpen={isAddPlacePopupOpen} onClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
         <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
-        <PopupWithForm name='delete-card' title='Вы уверены?' textButton='Да' />
+        <PopupWithForm name='delete-card' />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-        <InfoTooltip isOpen={isInfoTooltipPopupOpen} onClose={closeAllPopups} isSuccess={isSuccess} />
+        <InfoTooltip  isOpen={isInfoTooltipPopupOpen} 
+                      onClose={closeAllPopups} 
+                      isSuccessInfoTooltipStatus={isSuccessInfoTooltipStatus}
+                      tooltipMessage={tooltipMessage}
+                      tooltipIcon={tooltipIcon}
+                      />
       </div>
     </CurrentUserContext.Provider>
   );

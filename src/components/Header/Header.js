@@ -17,7 +17,7 @@ function Header({email, handleSignOut}) {
                     <Link to="/sign-up" className="header__link">Регистрация</Link>
                 }/>
                 <Route path='sign-up' element={
-                    <Link to="/sign-ip" className="header__link">Войти</Link>
+                    <Link to="/sign-in" className="header__link">Войти</Link>
                 }/>
                 <Route path='/' element={
                     <div className="header__info">
