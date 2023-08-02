@@ -27,7 +27,7 @@
 `npm start`
 
 ## 🔗 Ссылка на проект:
-[Проект: Место-React](https://dmitrykazancev.github.io/mesto-react-auth/)
+[Проект: Место-React](https://dmitrykazancev.github.io/react-mesto-auth/)
 
 
 ## 🚀 Обо мне
