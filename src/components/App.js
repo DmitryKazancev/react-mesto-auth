@@ -33,7 +33,7 @@ function App() {
   const [isSuccessInfoTooltipStatus, setIsSuccessInfoTooltipStatus] = useState(false);
   const [email, setEmail] = useState("");
   const [tooltipMessage, setTooltipMessage] = useState("");
-  const [tooltipIcon, setTooltipIcon] = useState([]);
+  const [tooltipIcon, setTooltipIcon] = useState("");
 
 
   //Click to avatar button function
@@ -234,18 +234,10 @@ function App() {
                                       />
           } />
           <Route path="/sign-in" element={
-            <Login  handleLogin={handleLogin} 
-                    setEmail={setEmail} 
-                    setIsSuccessInfoTooltipStatus={setIsSuccessInfoTooltipStatus} 
-                    setIsInfoTooltipPopupOpen={setIsInfoTooltipPopupOpen}
-                    />
+            <Login  handleLogin={handleLogin} />
           } />
           <Route path="/sign-up" element={
-             <Register  handleRegistration={handleRegister} 
-                        setLoggedIn={setLoggedIn} 
-                        setIsSuccessInfoTooltipStatus={setIsSuccessInfoTooltipStatus} 
-                        setIsInfoTooltipPopupOpen={setIsInfoTooltipPopupOpen}
-                        />
+             <Register  handleRegistration={handleRegister} />
           } />
           <Route path="*" element={loggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />
             }/>
